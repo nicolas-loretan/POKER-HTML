@@ -7,7 +7,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 2) Facultatif : forcer la racine à rendre testf.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'testf.html'));
+  res.sendFile(path.join(__dirname, 'public', 'game.html'));
   console.log("requete client reçu");
 });
 
