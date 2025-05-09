@@ -1,3 +1,19 @@
+const express = require('express'); // Framework web pour gérer les routes HTTP
+const http = require('http');       // Permet de créer un serveur HTTP
+const socketIo = require('socket.io'); // Permet la communication en temps réel (WebSocket)
+
+const app = express();                         // Crée une app Express
+const server = http.createServer(app);         // Crée un serveur HTTP à partir de l'app
+const io = socketIo(server);                   // Initialise Socket.io avec le serveur
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Serveur en ligne sur le port ${PORT}`);
+});
+
+
+
+
 // ----- Classe Player
 class Player {
     constructor(name, stack = 100) {
