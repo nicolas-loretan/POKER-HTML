@@ -2,9 +2,9 @@
   "name": "poker-app",
   "version": "1.0.0",
   "description": "Un petit serveur Node.js pour un jeu de poker",
-  "main": "indexpoker.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node indexpoker.js"
+    "start": "node index.js"
   },
   "keywords": ["poker", "nodejs", "jeu"],
   "author": "TonNom",
