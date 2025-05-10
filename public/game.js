@@ -34,7 +34,7 @@ function afficheInfos(winnerlist,winnerpot){
 	  "Winners : " + winnerlist.map(w => w.name).join(", ") + " | Pot : " + winnerpot;
 }
 	
-function afficheRiver(cards){
+function afficheRiver(cards, pot){
   _riverAffiche.textContent = "River : ";
   cards.forEach(c => {
     _riverAffiche.textContent += formatCard(c) + " ";  // Ajoute la carte formatée à chaque itération
