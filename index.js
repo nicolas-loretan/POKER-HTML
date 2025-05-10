@@ -2,6 +2,16 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+const joueurParId = {}
+
+// Joueurs
+let players = [
+    new Player("Jean",0),
+    new Player("Thom", 300,1),
+    new Player("Nico", 300,2),
+    new Player("Flo",3)
+];
+
 function generateRandomId() {
   const min = 1000000000;
   const max = 9999999999;
@@ -17,6 +27,26 @@ gameSpace.on("connection", (socket) => {
   socket.on("nouvellePartie", () => {
     console.log("Nouvelle partie demandée");
     nouvellePartie(); // Appelle ta fonction côté serveur
+  });
+  socket.on('check', (data) => {
+    joueurParId[data.id].check();
+});
+    // Gère l'action de check
+  });
+
+  socket.on('call', (data) => {
+    joueurParId[data.id].call();
+    // Gère l'action de call
+  });
+
+  socket.on('fall', (data) => {
+    joueurParId[data.id].fall();
+    // Gère l'action de fold
+  });
+
+  socket.on('raise', (data) => {
+    joueurParId[data.id].raise(data.nb);
+    // Gère le raise (mise)
   });
 
   socket.on("disconnect", () => {
@@ -59,14 +89,16 @@ app.listen(PORT, () => {
 
 // ----- Classe Player
 class Player {
-    constructor(name, stack = 100) {
+    constructor(name, id ,stack = 100) {
         this.name = name;
-		this.hand = [];
+	this.hand = [];
         this.stack = stack;
         this.best = null;
         this.paragraph = null;
-		this.state = "waiting";
-		this.raise = 0;
+	this.state = "waiting";
+	this.raise = 0;
+	this.id = id;
+	joueurParId[this.id] = this; // ajoute le joueur au dictionnaire avec comme clef son id
 		
     }
 	
@@ -99,60 +131,30 @@ class Player {
 			
 	        if (this.state == "waiting") {
 	            this.state = "playing";
-	
-	            const playForm = document.getElementById('playForm');
-	            playForm.innerHTML = ''; // vider avant de recréer les boutons
-	
-	            const btns = [];
+			
+	            const action = [];
 	
 	            if (callAmount == this.raise) {
-	                const btn1 = document.createElement('button');
-	                btn1.textContent = 'Check';
-	                btn1.onclick = () => this.check();
-	                btns.push(btn1);
+	                action.push("check);
 	            } else {
-	                const btn2 = document.createElement('button');
-	                btn2.textContent = `Suivre ${callAmount - this.raise}`;
-	                btn2.onclick = () => this.call();
-					
-	                const btn3 = document.createElement('button');
-	                btn3.textContent = 'Se coucher';
-	                btn3.onclick = () => this.fall();
-					
-	                btns.push(btn2, btn3);
+	                action.push(call, fall);
 	            }
 				
-				if (callAmount < this.stack) {
-		            const curseurContainer = document.createElement('div');
-		            const curseur = document.createElement('input');
-		            curseur.type = 'range';
-		            curseur.min = callAmount - this.raise;
-		            curseur.max = this.stack-this.raise;
-		            curseur.value = 0;
-		
-		            const valeur = document.createElement('span');
-		            valeur.textContent = curseur.value;
-		
-		            curseur.addEventListener('input', () => {
-		                valeur.textContent = curseur.value;
-		            });
-		
-		            const btnConfirmer = document.createElement('button');
-		            btnConfirmer.textContent = 'Confirmer';
-		            btnConfirmer.onclick = () => {
-		                this.toRaise(Number(curseur.value));
-		            };
-		
-		            curseurContainer.appendChild(curseur);
-		            curseurContainer.appendChild(valeur);
-		            curseurContainer.appendChild(btnConfirmer);
-					playForm.appendChild(curseurContainer);
-				}
+		    if (callAmount < this.stack) {
+		        action.push(curseur)
+		    }
 	
-	            btns.forEach(b => playForm.appendChild(b));
-				this.updateDisplay();
+		    socket.emit("changePlayForm", {
+			  listBtns: btns,
+			  raise: this.raise,
+			  stack: this.stack,
+			  callAmount: callAmount,
+			  id: this.id
+			});
+			
+		    this.updateDisplay();
 	        } else {
-				this.played()
+			this.played()
 			}
 	    });
 	}	
@@ -164,7 +166,7 @@ class Player {
 	    	this.state = "waiting";
 			}
 		this.updateDisplay();
-	    document.getElementById('playForm').innerHTML = '';
+	    socket.emit("changePlayForm",{id:this.id});
 	    if (this._resolveTour) {
 	        this._resolveTour(); // débloque await player.play()
 	        this._resolveTour = null;
@@ -320,14 +322,6 @@ const _ensembleJoueurs = document.getElementById("ensembleJoueurs");
 const _river = document.getElementById("river");
 const _riverAffiche = document.createElement("p");
 _river.appendChild(_riverAffiche);
-
-// Joueurs
-let players = [
-    new Player("Jean"),
-    new Player("Thom", 300),
-    new Player("Nico", 300),
-    new Player("Flo",)
-];
 
 function mainPot() {
 	let pot = 0
