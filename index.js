@@ -24,6 +24,9 @@ function generateRandomId() {
 // Namespace pour le jeu
 const gameSpace = io.of("/game");
 
+// Fichiers statiques
+app.use(express.static(path.join(__dirname, 'public')));
+
 gameSpace.on("connection", (socket) => {
   console.log("Un client s'est connecté au jeu");
 
@@ -52,9 +55,6 @@ gameSpace.on("connection", (socket) => {
     console.log("Un client s'est déconnecté du jeu");
   });
 });
-
-// Fichiers statiques
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.get('/accueil', (req, res) => {
