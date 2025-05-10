@@ -28,7 +28,8 @@ function display(idP) {
 
 function updateDisplay(IdP,name,stack,raise,state,hand) {
 	paragrapheByIdP[idP].textContent = `Nom: ${name}, Score: ${stack -raise}, Mise Totale : ${raise}, State : ${state}, Cartes: ${hand.map(formatCard).join(" | ")}`;
-	
+}
+
 function afficheInfos(winnerlist,winnerpot){
 	document.getElementById("infos").textContent =
 	  "Winners : " + winnerlist.map(w => w.name).join(", ") + " | Pot : " + winnerpot;
