@@ -5,7 +5,6 @@ const app = express();
 // 1) Sert automatiquement tous les fichiers de public/ (y compris testf.html)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 2) Facultatif : forcer la racine à rendre testf.html
 app.get('/game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'game.html'));
   console.log("client connécté à la page game");
