@@ -6,10 +6,10 @@ const joueurParId = {}
 
 // Joueurs
 let players = [
-    new Player("Jean",0),
-    new Player("Thom", 300,1),
-    new Player("Nico", 300,2),
-    new Player("Flo",3)
+    new Player("Jean"),
+    new Player("Thom", 300),
+    new Player("Nico", 300),
+    new Player("Flo")
 ];
 
 function generateRandomId() {
@@ -89,7 +89,7 @@ app.listen(PORT, () => {
 
 // ----- Classe Player
 class Player {
-    constructor(name, id ,stack = 100) {
+    constructor(name, stack = 100) {
         this.name = name;
 	this.hand = [];
         this.stack = stack;
@@ -97,7 +97,13 @@ class Player {
         this.paragraph = null;
 	this.state = "waiting";
 	this.raise = 0;
-	this.id = id;
+	let id = null
+	while (id == null){
+		id = generateRandomId()
+		if (!(id in joueurParId)){
+			this.id = id
+		} else {id = null}
+	}
 	joueurParId[this.id] = this; // ajoute le joueur au dictionnaire avec comme clef son id
 		
     }
