@@ -17,6 +17,10 @@ app.get('/game', (req, res) => {
   console.log("Client connecté à la page game");
 });
 
+app.get('/', (req, res) => {
+  res.redirect('/accueil');
+});
+
 // Middleware pour gérer toutes les autres routes non définies
 app.use((req, res) => {
   res.status(404).send('Erreur 404 : Page non trouvée');
