@@ -350,7 +350,7 @@ function mainPot() {
 	players.forEach(p => {
 		pot += p.raise
 	})
-    document.getElementById("MAIN_POT").textContent = `${pot}`;
+    AfficheRiver()
 }
 
 let tourPlaying = true
