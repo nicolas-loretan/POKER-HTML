@@ -6,9 +6,19 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 2) Facultatif : forcer la racine à rendre testf.html
-app.get('/', (req, res) => {
+app.get('/game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'game.html'));
-  console.log("requete client reçu");
+  console.log("client connécté à la page game");
+});
+
+app.get('/accueil', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'accueil.html'));
+  console.log("client connécté à la page accueil");
+});
+
+app.get('/', (req, res) => {
+  res.sendStatus(404);;
+  console.log("le client à taper une url inconnue");
 });
 
 const PORT = process.env.PORT || 4000;
