@@ -1,5 +1,6 @@
 const socket = io(); // ou io("http://localhost:3000") si pas même origine
 const playForm = document.getElementById('playForm');
+const _ensembleJoueurs = document.getElementById("ensembleJoueurs");
 
 function nouvellePartie(){
   socket.emit("nouvellePartie");
@@ -13,9 +14,9 @@ function formatCard(card) {
 
 paragrapheByIdP = {}
 
-function display(container, idP) {
+function display(idP) {
         paragrapheByIdP[idP] = document.createElement("p");
-        container.appendChild(paragrapheByIdP[idP]);
+        _ensembleJoueurs.appendChild(paragrapheByIdP[idP]);
         updateDisplay(IdP);
     }
 
