@@ -1,6 +1,10 @@
 const socket = io(); // ou io("http://localhost:3000") si pas même origine
 const playForm = document.getElementById('playForm');
 const _ensembleJoueurs = document.getElementById("ensembleJoueurs");
+const _river = document.getElementById("river");
+const _riverAffiche = document.createElement("p");
+_river.appendChild(_riverAffiche);
+_riverAffiche.textContent = "River : ";
 
 function nouvellePartie(){
   socket.emit("nouvellePartie");
@@ -22,6 +26,11 @@ function display(idP) {
 
 function updateDisplay(IdP,name,stack,raise,state,hand) {
 	paragraphByIdP[idP].textContent = `Nom: ${name}, Score: ${stack -raise}, Mise Totale : ${raise}, State : ${state}, Cartes: ${hand.map(formatCard).join(" | ")}`;
+}
+
+function afficheRiver(cards){
+	_riverAffiche.textContent = "River : "
+	cards.forEach(c=>{_riverAffiche.textContent =})
 }
 
 function changePlayForm(listBtns = null, raise = null, stack = null, callAmount = null, id){
