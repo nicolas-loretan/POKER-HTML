@@ -245,7 +245,7 @@ let players = [
     new Player("Nico", 300),
     new Player("Flo")
 ];
-
+let community = [];
 const name_face = ["Jack", "Queen", "King", "Ace"];
 const name_color = ["Heart", "Diamond", "Club", "Spade"];
 
@@ -402,7 +402,7 @@ async function nouvellePartie() {
 	players = players.filter(p => p.stack !== 0) // supprime les joueurs qui sont à 0
 	callAmount = 0
 	let deck = [...deckInit];
-    let community = [];
+        community = [];
 	let outsiderList = []
 	let winnerlist = []
 	mainPot()
