@@ -21,7 +21,7 @@ paragrapheByIdP = {}
 function display(idP) {
         paragrapheByIdP[idP] = document.createElement("p");
         _ensembleJoueurs.appendChild(paragrapheByIdP[idP]);
-        updateDisplay(IdP);
+        updateDisplay(idP);
     }
 
 function updateDisplay(IdP,name,stack,raise,state,hand) {
