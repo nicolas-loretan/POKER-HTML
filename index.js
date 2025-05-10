@@ -1,9 +1,19 @@
 const express = require('express');
+const http = require('http'); // nécessaire pour créer le serveur
 const path = require('path');
-const app = express();
+const { Server } = require('socket.io'); // importer socket.io
 
-const joueurParId = {} // id privée
-const joueurParIdP = {} // id public
+const app = express();
+const server = http.createServer(app); // créer un vrai serveur http
+const io = new Server(server, {
+  cors: {
+    origin: "*", // à adapter si besoin
+    methods: ["GET", "POST"]
+  }
+});
+
+const joueurParId = {}; // id privé
+const joueurParIdP = {}; // id public
 
 function generateRandomId() {
   const min = 1000000000;
@@ -11,34 +21,31 @@ function generateRandomId() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Namespace pour le jeu
 const gameSpace = io.of("/game");
 
 gameSpace.on("connection", (socket) => {
   console.log("Un client s'est connecté au jeu");
 
-  // Le serveur écoute l'événement "nouvellePartie" envoyé par CE client
   socket.on("nouvellePartie", () => {
     console.log("Nouvelle partie demandée");
-    nouvellePartie(); // Appelle ta fonction côté serveur
+    // nouvellePartie(); // Assure-toi que cette fonction est bien définie
   });
+
   socket.on('check', (data) => {
-    joueurParId[data.id].check();
-    // Gère l'action de check
+    joueurParId[data.id]?.check?.(); // protection au cas où
   });
 
   socket.on('call', (data) => {
-    joueurParId[data.id].call();
-    // Gère l'action de call
+    joueurParId[data.id]?.call?.();
   });
 
   socket.on('fall', (data) => {
-    joueurParId[data.id].fall();
-    // Gère l'action de fold
+    joueurParId[data.id]?.fall?.();
   });
 
   socket.on('raise', (data) => {
-    joueurParId[data.id].raise(data.nb);
-    // Gère le raise (mise)
+    joueurParId[data.id]?.raise?.(data.nb);
   });
 
   socket.on("disconnect", () => {
@@ -46,17 +53,15 @@ gameSpace.on("connection", (socket) => {
   });
 });
 
-// Middleware pour servir les fichiers statiques du dossier 'public'
+// Fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-// Route pour '/accueil' qui sert 'accueil.html'
+// Routes
 app.get('/accueil', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'accueil.html'));
   console.log("Client connecté à la page accueil");
 });
 
-// Route pour '/game' qui sert 'game.html'
 app.get('/game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'game.html'));
   console.log("Client connecté à la page game");
@@ -66,14 +71,14 @@ app.get('/', (req, res) => {
   res.redirect('/accueil');
 });
 
-// Middleware pour gérer toutes les autres routes non définies
 app.use((req, res) => {
   res.status(404).send('Erreur 404 : Page non trouvée');
   console.log(`Requête non reconnue : ${req.originalUrl}`);
 });
 
+// Démarrage du serveur HTTP avec socket.io branché dessus
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
 
