@@ -31,6 +31,7 @@ function updateDisplay(IdP,name,stack,raise,state,hand) {
 function afficheRiver(cards){
 	_riverAffiche.textContent = "River : "
 	cards.forEach(c=>{_riverAffiche.textContent =})
+	document.getElementById("MAIN_POT").textContent = `${pot}`;
 }
 
 function changePlayForm(listBtns = null, raise = null, stack = null, callAmount = null, id){
