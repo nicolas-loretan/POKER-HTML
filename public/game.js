@@ -5,6 +5,8 @@ const _river = document.getElementById("river");
 const _riverAffiche = document.createElement("p");
 _river.appendChild(_riverAffiche);
 _riverAffiche.textContent = "River : ";
+const name_face = ["Jack", "Queen", "King", "Ace"];
+const name_color = ["Heart", "Diamond", "Club", "Spade"];
 
 function nouvellePartie(){
   socket.emit("nouvellePartie");
@@ -25,14 +27,17 @@ function display(idP) {
     }
 
 function updateDisplay(IdP,name,stack,raise,state,hand) {
-	paragraphByIdP[idP].textContent = `Nom: ${name}, Score: ${stack -raise}, Mise Totale : ${raise}, State : ${state}, Cartes: ${hand.map(formatCard).join(" | ")}`;
+	paragrapheByIdP[idP].textContent = `Nom: ${name}, Score: ${stack -raise}, Mise Totale : ${raise}, State : ${state}, Cartes: ${hand.map(formatCard).join(" | ")}`;
 }
 
 function afficheRiver(cards){
-	_riverAffiche.textContent = "River : "
-	cards.forEach(c=>{_riverAffiche.textContent =})
-	document.getElementById("MAIN_POT").textContent = `${pot}`;
+  _riverAffiche.textContent = "River : ";
+  cards.forEach(c => {
+    _riverAffiche.textContent += formatCard(c) + " ";  // Ajoute la carte formatée à chaque itération
+  });
+  document.getElementById("MAIN_POT").textContent = `${pot}`;
 }
+
 
 function changePlayForm(listBtns = null, raise = null, stack = null, callAmount = null, id){
   const btns = [];
@@ -77,7 +82,7 @@ function changePlayForm(listBtns = null, raise = null, stack = null, callAmount 
 		            const btnConfirmer = document.createElement('button');
 		            btnConfirmer.textContent = 'Confirmer';
 		            btnConfirmer.onclick = () => {
-		                toRaise(Number(id, curseur.value));
+		                toRaise(id, Number(curseur.value));
 		            };
 		
 		            curseurContainer.appendChild(curseur);
@@ -90,7 +95,7 @@ function changePlayForm(listBtns = null, raise = null, stack = null, callAmount 
 }
 
 function check(id){
-  socket.emit("nouvellePartie", {id: id});
+  socket.emit("check", {id: id});
 }
 
 function call(id){
