@@ -2,26 +2,30 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// 1) Sert automatiquement tous les fichiers de public/ (y compris testf.html)
+// Middleware pour servir les fichiers statiques du dossier 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/game', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'game.html'));
-  console.log("client connécté à la page game");
-});
-
+// Route pour '/accueil' qui sert 'accueil.html'
 app.get('/accueil', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'accueil.html'));
-  console.log("client connécté à la page accueil");
+  console.log("Client connecté à la page accueil");
 });
 
-app.get('/', (req, res) => {
-  res.sendStatus(404);;
-  console.log("le client à taper une url inconnue");
+// Route pour '/game' qui sert 'game.html'
+app.get('/game', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'game.html'));
+  console.log("Client connecté à la page game");
+});
+
+// Middleware pour gérer toutes les autres routes non définies
+app.use((req, res) => {
+  res.status(404).send('Erreur 404 : Page non trouvée');
+  console.log(`Requête non reconnue : ${req.originalUrl}`);
 });
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
+
 
