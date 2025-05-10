@@ -5,21 +5,21 @@ function nouvellePartie(){
   socket.emit("nouvellePartie");
 }
 
-function changePlayForm(listBtns = null, raise = null, stack = null, callAmount = null){
+function changePlayForm(listBtns = null, raise = null, stack = null, callAmount = null, id){
   const btns = [];
   playForm.innerHTML = ''; // vider avant de recréer les boutons
 	 listBtns.forEach(b => {
      if(b=="check"){
        const btn1 = document.createElement('button');
 	                btn1.textContent = 'Check';
-	                btn1.onclick = () => check();
+	                btn1.onclick = () => check(id);
 	                btns.push(btn1);
      }
 
      if(b=="call"){
        const btn2 = document.createElement('button');
 	                btn2.textContent = `Suivre ${callAmount - raise}`;
-	                btn2.onclick = () => call();
+	                btn2.onclick = () => call(id);
                   btns.push(btn2);
        
      }
@@ -27,7 +27,7 @@ function changePlayForm(listBtns = null, raise = null, stack = null, callAmount 
      if(b=="fall"){
 	                const btn3 = document.createElement('button');
 	                btn3.textContent = 'Se coucher';
-	                btn3.onclick = () => fall();
+	                btn3.onclick = () => fall(id);
                   btns.push(btn3);       
      }
      if(b=="curseur"){
@@ -48,7 +48,7 @@ function changePlayForm(listBtns = null, raise = null, stack = null, callAmount 
 		            const btnConfirmer = document.createElement('button');
 		            btnConfirmer.textContent = 'Confirmer';
 		            btnConfirmer.onclick = () => {
-		                toRaise(Number(curseur.value));
+		                toRaise(Number(id, curseur.value));
 		            };
 		
 		            curseurContainer.appendChild(curseur);
@@ -60,21 +60,22 @@ function changePlayForm(listBtns = null, raise = null, stack = null, callAmount 
   btns.forEach(b => playForm.appendChild(b));
 }
 
-function check(){
-  socket.emit("nouvellePartie");
+function check(id){
+  socket.emit("nouvellePartie", {id: id});
 }
 
-function call(){
-  socket.emit("call");
+function call(id){
+  socket.emit("call", {id: id});
 }
 
-function fall(){
-  socket.emit("fall");
+function fall(id){
+  socket.emit("fall", {id: id});
 }
 
-function toRaise(NB){
+function toRaise(id,nb){
   socket.emit("toRaise", {
-    nb: NB
+    nb: nb,
+    id: id
   });
 }
 
