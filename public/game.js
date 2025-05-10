@@ -1,4 +1,7 @@
+const socket = io(); // ou io("http://localhost:3000") si pas même origine
+
 function nouvellePartie(){
+  socket.emit("nouvellePartie");
 }
 
 
