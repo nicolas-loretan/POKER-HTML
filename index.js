@@ -30,7 +30,6 @@ gameSpace.on("connection", (socket) => {
   });
   socket.on('check', (data) => {
     joueurParId[data.id].check();
-});
     // Gère l'action de check
   });
 
