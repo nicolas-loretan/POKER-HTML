@@ -94,6 +94,7 @@ class Player {
         this.paragraph = null;
 	this.state = "waiting";
 	this.raise = 0;
+	    
 	let id = null
 	while (id == null){
 		id = generateRandomId()
@@ -106,11 +107,11 @@ class Player {
 	let idP = null
 	while (idP == null){
 		idP = generateRandomId()
-		if (!(id in joueurParIdP)){
-			this.id = idP
+		if (!(idP in joueurParIdP)){
+			this.idP = idP
 		} else {idP = null}
 	}
-	joueurParId[this.idP] = this;
+	joueurParIdP[this.idP] = this;
     }
 	
 	receiveCard(card) {
