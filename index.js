@@ -4,13 +4,6 @@ const app = express();
 
 const joueurParId = {} // id privée
 const joueurParIdP = {} // id public
-// Joueurs
-let players = [
-    new Player("Jean"),
-    new Player("Thom", 300),
-    new Player("Nico", 300),
-    new Player("Flo")
-];
 
 function generateRandomId() {
   const min = 1000000000;
@@ -124,10 +117,9 @@ class Player {
         this.best = null;
     }
 	
-    display(container) {
+    display() {
         socket.emit("display", {
 			  IdP: this.IdP,
-			  container: container
 			});
     }
 
@@ -228,6 +220,14 @@ class Player {
 		this.played()
 	}
 }
+
+// Joueurs
+let players = [
+    new Player("Jean"),
+    new Player("Thom", 300),
+    new Player("Nico", 300),
+    new Player("Flo")
+];
 
 const name_face = ["Jack", "Queen", "King", "Ace"];
 const name_color = ["Heart", "Diamond", "Club", "Spade"];
@@ -339,10 +339,6 @@ for (let j = 1; j < 5; j++) {
         deckInit.push([i, j]);
     }
 }
-const _ensembleJoueurs = document.getElementById("ensembleJoueurs");
-const _river = document.getElementById("river");
-const _riverAffiche = document.createElement("p");
-_river.appendChild(_riverAffiche);
 
 function mainPot() {
 	let pot = 0
@@ -389,7 +385,7 @@ async function nouvellePartie() {
     players.forEach(p => {
 		p.state = "waiting";
 		p.resetHand();
-        p.display(_ensembleJoueurs);
+        p.display();
 		for (let i = 0; i < 2; i++) {
             let idx = Math.floor(Math.random() * deck.length);
             let card = deck.splice(idx, 1)[0];
