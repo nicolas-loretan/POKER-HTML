@@ -490,7 +490,7 @@ async function nouvellePartie() {
 		winnerlist: winnerlist,
 		winnerpot: winnerpot
 			});
-
+	});
 }
 
 	// faire tourner les joueurs
