@@ -394,6 +394,7 @@ function AfficheRiver(){
   // Ici socket est défini
   socket.emit("display", {
 			  cards: community,
+	  		  pot: pot
 			});
 });
 
