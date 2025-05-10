@@ -402,12 +402,13 @@ async function nouvellePartie() {
 }
 
 
-// Bouton
-const bouton = document.createElement("button");
-bouton.textContent = "Nouvelle partie";
-bouton.addEventListener("click", nouvellePartie);
-document.body.appendChild(bouton);
 
+io.on("connection", (socket) => {
+  // Ce code est appelé à chaque fois qu'un client se connecte
+  io.on("nouvellePartie", function(socket)){
+	nouvellePartie()
+	}
+});
 
 
 // Middleware pour servir les fichiers statiques du dossier 'public'
