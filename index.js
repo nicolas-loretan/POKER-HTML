@@ -2,6 +2,12 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+function generateRandomId() {
+  const min = 1000000000;
+  const max = 9999999999;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // Middleware pour servir les fichiers statiques du dossier 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
