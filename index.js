@@ -156,13 +156,13 @@ class Player {
 	            const action = [];
 	
 	            if (callAmount == this.raise) {
-	                action.push("check);
+	                action.push("check");
 	            } else {
-	                action.push(call, fall);
+	                action.push("call", "fall");
 	            }
 				
 		    if (callAmount < this.stack) {
-		        action.push(curseur)
+		        action.push("curseur")
 		    }
 	
 		    socket.emit("changePlayForm", {
