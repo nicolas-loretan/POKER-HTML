@@ -123,13 +123,18 @@ class Player {
     }
 	
     display() {
-        socket.emit("display", {
+	    io.on("connection", (socket) => {
+  // Ici socket est défini
+  socket.emit("display", {
 			  IdP: this.IdP,
 			});
+});
     }
 
     updateDisplay() {
-	socket.emit("updateDisplay", {
+	    io.on("connection", (socket) => {
+  // Ici socket est défini
+  socket.emit("updateDisplay", {
 			  IdP: this.IdP,
 			  name: this.name,
 			  stack: this.stack,
@@ -137,6 +142,7 @@ class Player {
 			  state: this.state,
 			  hand: this.hand	
 			});
+});
     }
 	
 	play() {
@@ -161,14 +167,17 @@ class Player {
 		    if (callAmount < this.stack) {
 		        action.push("curseur")
 		    }
-	
-		    socket.emit("changePlayForm", {
+		io.on("connection", (socket) => {
+  // Ici socket est défini
+  socket.emit("changePlayForm", {
 			  listBtns: btns,
 			  raise: this.raise,
 			  stack: this.stack,
 			  callAmount: callAmount,
 			  id: this.id
 			});
+});
+
 			
 		    this.updateDisplay();
 	        } else {
@@ -184,7 +193,10 @@ class Player {
 	    	this.state = "waiting";
 			}
 		this.updateDisplay();
-	    socket.emit("changePlayForm",{id:this.id});
+		io.on("connection", (socket) => {
+  socket.emit("changePlayForm",{id:this.id});
+});
+
 	    if (this._resolveTour) {
 	        this._resolveTour(); // débloque await player.play()
 	        this._resolveTour = null;
@@ -377,9 +389,13 @@ let callAmount = 0
 mainPot()
 
 function AfficheRiver(){
-	socket.emit("display", {
+	io.on("connection", (socket) => {
+  // Ici socket est défini
+  socket.emit("display", {
 			  cards: community,
 			});
+});
+
 }
 
 async function nouvellePartie() {
