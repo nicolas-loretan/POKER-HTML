@@ -5,6 +5,24 @@ function nouvellePartie(){
   socket.emit("nouvellePartie");
 }
 
+function formatCard(card) {
+    let val = card[0] > 10 ? name_face[card[0] - 11] : card[0];
+    let suit = name_color[card[1] - 1];
+    return `${val} of ${suit}`;
+}
+
+paragrapheByIdP = {}
+
+function display(container, idP) {
+        paragrapheByIdP[idP] = document.createElement("p");
+        container.appendChild(paragrapheByIdP[idP]);
+        updateDisplay(IdP);
+    }
+
+function updateDisplay(IdP,name,stack,raise,state,hand) {
+	paragraphByIdP[idP].textContent = `Nom: ${name}, Score: ${stack -raise}, Mise Totale : ${raise}, State : ${state}, Cartes: ${hand.map(formatCard).join(" | ")}`;
+}
+
 function changePlayForm(listBtns = null, raise = null, stack = null, callAmount = null, id){
   const btns = [];
   playForm.innerHTML = ''; // vider avant de recréer les boutons
