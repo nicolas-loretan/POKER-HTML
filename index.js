@@ -371,6 +371,12 @@ async function tour() {
 let callAmount = 0
 mainPot()
 
+function AfficheRiver(){
+	socket.emit("display", {
+			  cards: community,
+			});
+}
+
 async function nouvellePartie() {
 	players = players.filter(p => p.stack !== 0) // supprime les joueurs qui sont à 0
 	callAmount = 0
@@ -380,8 +386,10 @@ async function nouvellePartie() {
 	let winnerlist = []
 	mainPot()
 	
-    _ensembleJoueurs.innerHTML = '';
-	_riverAffiche.textContent = "River : ";
+    players.forEach(p=> {
+	    p.upadateDisplay()
+    })
+	AfficheRiver()
     players.forEach(p => {
 		p.state = "waiting";
 		p.resetHand();
@@ -400,11 +408,11 @@ async function nouvellePartie() {
     }
 	
 	await tour();
-	_riverAffiche.textContent = "Flop: " + community.slice(0, 3).map(formatCard).join(" | ");
+	AfficheRiver()
 	await tour();
-	_riverAffiche.textContent += " | Turn: " + formatCard(community[3]);
+	AfficheRiver()
 	await tour();
-	_riverAffiche.textContent += " | River: " + formatCard(community[4]);
+	AfficheRiver()
 	await tour();
 	
 	players.forEach(p => {
