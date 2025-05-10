@@ -8,6 +8,55 @@ function generateRandomId() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const gameSpace = io.of("/game");
+
+gameSpace.on("connection", (socket) => {
+  console.log("Un client s'est connecté au jeu");
+
+  // Le serveur écoute l'événement "nouvellePartie" envoyé par CE client
+  socket.on("nouvellePartie", () => {
+    console.log("Nouvelle partie demandée");
+    nouvellePartie(); // Appelle ta fonction côté serveur
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Un client s'est déconnecté du jeu");
+  });
+});
+
+// Middleware pour servir les fichiers statiques du dossier 'public'
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+// Route pour '/accueil' qui sert 'accueil.html'
+app.get('/accueil', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'accueil.html'));
+  console.log("Client connecté à la page accueil");
+});
+
+// Route pour '/game' qui sert 'game.html'
+app.get('/game', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'game.html'));
+  console.log("Client connecté à la page game");
+});
+
+app.get('/', (req, res) => {
+  res.redirect('/accueil');
+});
+
+// Middleware pour gérer toutes les autres routes non définies
+app.use((req, res) => {
+  res.status(404).send('Erreur 404 : Page non trouvée');
+  console.log(`Requête non reconnue : ${req.originalUrl}`);
+});
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Serveur lancé sur le port ${PORT}`);
+});
+
+
+
 // ----- Classe Player
 class Player {
     constructor(name, stack = 100) {
@@ -400,46 +449,3 @@ async function nouvellePartie() {
 	let premier = players.shift();
     players.push(premier);
 }
-
-
-
-io.on("connection", (socket) => {
-  // Ce code est appelé à chaque fois qu'un client se connecte
-  io.on("nouvellePartie", function(socket)){
-	nouvellePartie()
-	}
-});
-
-
-// Middleware pour servir les fichiers statiques du dossier 'public'
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-// Route pour '/accueil' qui sert 'accueil.html'
-app.get('/accueil', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'accueil.html'));
-  console.log("Client connecté à la page accueil");
-});
-
-// Route pour '/game' qui sert 'game.html'
-app.get('/game', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'game.html'));
-  console.log("Client connecté à la page game");
-});
-
-app.get('/', (req, res) => {
-  res.redirect('/accueil');
-});
-
-// Middleware pour gérer toutes les autres routes non définies
-app.use((req, res) => {
-  res.status(404).send('Erreur 404 : Page non trouvée');
-  console.log(`Requête non reconnue : ${req.originalUrl}`);
-});
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Serveur lancé sur le port ${PORT}`);
-});
-
-
