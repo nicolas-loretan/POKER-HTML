@@ -482,8 +482,14 @@ async function nouvellePartie() {
 		winner.stack += winnerpot;
 
 	console.log("Mise à jour du texte avec : " + "Winners : " + winnerlist.map(w => w.name).join(", ") + " | Pot : " + winnerpot);
-	document.getElementById("infos").textContent =
-	  "Winners : " + winnerlist.map(w => w.name).join(", ") + " | Pot : " + winnerpot;
+		
+	io.on("connection", (socket) => {
+ 	 // Ici socket est défini
+  	socket.emit("afficheInfos", {
+		winnerlist: winnerlist,
+		winnerpot: winnerpot
+			});
+
 }
 
 	// faire tourner les joueurs
