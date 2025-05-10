@@ -2,8 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const joueurParId = {}
-
+const joueurParId = {} // id privée
+const joueurParIdP = {} // id public
 // Joueurs
 let players = [
     new Player("Jean"),
@@ -105,7 +105,15 @@ class Player {
 		} else {id = null}
 	}
 	joueurParId[this.id] = this; // ajoute le joueur au dictionnaire avec comme clef son id
-		
+
+	let idP = null
+	while (idP == null){
+		idP = generateRandomId()
+		if (!(id in joueurParIdP)){
+			this.id = idP
+		} else {idP = null}
+	}
+	joueurParId[this.idP] = this;
     }
 	
 	receiveCard(card) {
@@ -118,13 +126,21 @@ class Player {
     }
 	
     display(container) {
-        this.paragraph = document.createElement("p");
-        container.appendChild(this.paragraph);
-        this.updateDisplay();
+        socket.emit("display", {
+			  IdP: this.IdP,
+			  container: container
+			});
     }
 
     updateDisplay() {
-        this.paragraph.textContent = `Nom: ${this.name}, Score: ${this.stack - this.raise}, Mise Totale : ${this.raise}, State : ${this.state}, Cartes: ${this.hand.map(formatCard).join(" | ")}`;
+	socket.emit("updateDisplay", {
+			  IdP: this.IdP,
+			  name: this.name,
+			  stack: this.stack,
+			  raise: this.raise,
+			  state: this.state,
+			  hand: this.hand	
+			});
     }
 	
 	play() {
