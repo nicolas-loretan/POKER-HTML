@@ -389,6 +389,7 @@ async function tour() {
 
 let callAmount = 0
 mainPot()
+let pot = 0
 
 function AfficheRiver(){
 	io.on("connection", (socket) => {
