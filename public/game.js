@@ -1,4 +1,4 @@
-const socket = io(); 
+const socket = io("/game");
  // io ou io("http://localhost:3000") si pas même origine
 const playForm = document.getElementById('playForm');
 const _ensembleJoueurs = document.getElementById("ensembleJoueurs");
