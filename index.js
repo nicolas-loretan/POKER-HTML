@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http'); // nécessaire pour créer le serveur
 const path = require('path');
 const { Server } = require('socket.io'); // importer socket.io
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app); // créer un vrai serveur http
@@ -77,7 +78,7 @@ app.use((req, res) => {
 });
 
 // Démarrage du serveur HTTP avec socket.io branché dessus
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
