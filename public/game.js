@@ -1,4 +1,4 @@
-const socket = io("/game");
+const socket = io(); // Si les fichiers sont sur le même domaine
  // io ou io("http://localhost:3000") si pas même origine
 const playForm = document.getElementById('playForm');
 const _ensembleJoueurs = document.getElementById("ensembleJoueurs");
